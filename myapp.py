@@ -1,17 +1,13 @@
 import requests
 
-url = "http://127.0.0.1:8000/orders/"  # change this to your API endpoint
+url = "http://127.0.0.1:8000/shops/tables/"
 
 data = {
-  "shop": 1,
-  "table": 1,
-  "items": [
-    {"menu_item": 2, "quantity": 2},
-    {"menu_item": 1, "quantity": 1}
-  ]
+    "shop": 1,
+    "table_name": "Table 1"
 }
 
-response = requests.get(url)
+response = requests.post(url, json=data)
 
-print("Status Code:", response.status_code)
-print("Response JSON:", response.json())
+print(response.status_code)
+print(response.json())

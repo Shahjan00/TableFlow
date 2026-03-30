@@ -4,7 +4,7 @@ from accounts.models import User
 # Create your models here.
 
 class Shop(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE, related_name='shop')
+    user = models.ForeignKey(User,on_delete=models.CASCADE, related_name='shops')
 
     name = models.CharField(max_length=150)
     slug = models.SlugField(unique=True)
@@ -40,7 +40,7 @@ class Table(models.Model):
     
 
 class Menu(models.Model):
-    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name='menu')
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name='menu_items')
 
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
