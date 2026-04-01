@@ -20,8 +20,8 @@ class ShopSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         request = self.context.get('request')
-        # user = request.user
-        user = User.objects.first()     # Change itttttttt 
+        user = request.user
+        # user = User.objects.first()     # Change itttttttt 
         name = validated_data.get('name')
         base_slug = slugify(name)
 
@@ -47,7 +47,7 @@ class TableSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # generate unique token
         qr_token = str(uuid.uuid4())
-        qr_url = f"http://127.0.0.1:8000/order/{qr_token}/"
+        qr_url = f"http://127.0.0.1:8000/orders/menu/{qr_token}/"
 
         qr = qrcode.make(qr_url)
 

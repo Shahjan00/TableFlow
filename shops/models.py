@@ -5,6 +5,12 @@ from accounts.models import User
 
 class Shop(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE, related_name='shops')
+    staff_members = models.ManyToManyField(
+        User,
+        related_name='staff_shops',
+        blank=True,
+        limit_choices_to={'role': 'staff'},
+    )
 
     name = models.CharField(max_length=150)
     slug = models.SlugField(unique=True)
@@ -49,4 +55,3 @@ class Menu(models.Model):
     def __str__(self):
         return f"{self.name} - {self.price}"
     
-

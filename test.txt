@@ -1,0 +1,45 @@
+auth/register/
+
+{
+    "email" : "anna@anna.com",
+    "name" : "anna",
+    "phone" : "9897988798",
+    "address" : "Near gate no 3 of PU",
+    "role": "owner",
+    "password" : "anna"
+}
+
+shops/shop/
+
+{
+    "name" : "anna briyani",
+    "phone" : "9897988798",
+    "address" : "Near gate no 3 of PU"
+}
+
+shops/menu/
+
+{
+    "shop" : 5,
+    "name" : "Egg Curry",
+    "price" : "149"
+}
+
+shops/tables/
+
+{
+    "shop" : 5,
+    "table_name" : "Inside 2"
+}
+
+
+orders/order/<table-id>
+
+{
+    
+  "items": [
+    { "menu_item": 6, "quantity": 1 },
+    { "menu_item": 7, "quantity": 2 }
+  ]
+
+}

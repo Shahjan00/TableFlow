@@ -1,24 +1,32 @@
 from django.shortcuts import render
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import *
 from .serializers import *
 from rest_framework import status
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def menu_list_create(request): 
-    
+    if request.user.role not in ['owner']:
+        return Response({'error': 'Not allowed'}, status=403)
     if request.method == 'GET':
         shop_id = request.query_params.get('shop')
+        menu = Menu.objects.filter(shop__user=request.user)
 
         if shop_id:
-            menu = Menu.objects.filter(shop_id=shop_id)
-        else:
-            menu = Menu.objects.all()
+            menu = menu.filter(shop_id=shop_id)
         serializer = MenuSerializer(menu, many=True)
-        return Response(serializer.data)
+        if serializer.data:
+            return Response(serializer.data)
+        return Response({"message": "Not Have Any shop"})
 
     elif request.method == 'POST':
+        shop_id = request.data.get('shop')
+        if not Shop.objects.filter(id=shop_id, user=request.user).exists():
+            return Response({'error': 'You can only manage menu for your own shop'}, status=403)
+
         serializer = MenuSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -27,11 +35,17 @@ def menu_list_create(request):
     
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def shop_list_create(request):
+    if request.user.role not in ['owner']:
+        return Response({'error': 'Not allowed'}, status=403)
     if request.method == 'GET':
-        shops =  Shop.objects.all()
+        shops =  Shop.objects.filter(user=request.user)
+        # print(shops)
         serializer = ShopSerializer(shops, many=True)
-        return Response(serializer.data)
+        if serializer.data:
+            return Response(serializer.data)
+        return Response({"message": "Not Have Any shop"})
     elif request.method == 'POST':
         serializer = ShopSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
@@ -41,17 +55,25 @@ def shop_list_create(request):
     
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def table_list_create(request):
+    if request.user.role not in ['owner']:
+        return Response({'error': 'Not allowed'}, status=403)
     if request.method == 'GET':
         shop_id = request.query_params.get('shop')
+        tables = Table.objects.filter(shop__user=request.user)
 
         if shop_id:
-            tables = Table.objects.filter(shop_id=shop_id)
-        else:
-            tables = Table.objects.all()
+            tables = tables.filter(shop_id=shop_id)
         serializer = TableSerializer(tables, many=True)
-        return Response(serializer.data)
+        if serializer.data:
+            return Response(serializer.data)
+        return Response({"message": "Not Have Any Table"})
     elif request.method == 'POST':
+        shop_id = request.data.get('shop')
+        if not Shop.objects.filter(id=shop_id, user=request.user).exists():
+            return Response({'error': 'You can only manage tables for your own shop'}, status=403)
+
         serializer = TableSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
