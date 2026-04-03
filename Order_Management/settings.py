@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'Order_Management.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default='sqlite:///db.sqlite3')
+    'default': dj_database_url.config(default='postgresql://postgres:lVSSAHVuHfRaEhBRSSIBGPRgIJYrcTzP@postgres.railway.internal:5432/railway')
 }
 
 
@@ -138,3 +138,7 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://tableflow-production.up.railway.app"
+]
