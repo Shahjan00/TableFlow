@@ -1,10 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import *
 from .serializers import *
 from rest_framework import status
+from accounts.models import User
+from shops.models import Staff
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
@@ -79,3 +81,21 @@ def table_list_create(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def add_staff(request, shop_id):
+    if request.method == 'POST':
+        shop = get_object_or_404(Shop, id=shop_id)
+
+        if shop.user != request.user:
+            return Response({"error":"not allowed"}, status=403)
+        user_id = request.data.get('user_id')
+        user = get_object_or_404(User, email=user_id)
+
+        if user.role != 'staff':
+            return Response({"error": "Selected user is not staff"}, status=400)
+
+        Staff.objects.get_or_create(user=user, shop=shop)
+        shop.staff_members.add(user)
+        return Response({"message": "Staff linked successfully"}, status=200)

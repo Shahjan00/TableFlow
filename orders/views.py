@@ -9,6 +9,13 @@ from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
+def get_accessible_shop_ids(user):
+    if user.role == 'owner':
+        return Shop.objects.filter(user=user).values_list('id', flat=True)
+    if user.role == 'staff':
+        return Shop.objects.filter(staff_members=user).values_list('id', flat=True)
+    return Shop.objects.none().values_list('id', flat=True)
+
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def order_list_create(request):
@@ -16,7 +23,7 @@ def order_list_create(request):
         return Response({'error': 'Not allowed'}, status=403)
     if request.method == 'GET':
         shop_id = request.query_params.get('shop')
-        orders = Order.objects.filter(shop__user=request.user)
+        orders = Order.objects.filter(shop_id__in=get_accessible_shop_ids(request.user))
         if shop_id:
             orders = orders.filter(shop_id=shop_id)
 
@@ -26,8 +33,8 @@ def order_list_create(request):
         return Response({"message": "Not Have Any Order"})
     elif request.method == 'POST':
         shop_id = request.data.get('shop')
-        if not Shop.objects.filter(id=shop_id, user=request.user).exists():
-            return Response({'error': 'You can only create orders for your own shop'}, status=403)
+        if not Shop.objects.filter(id=shop_id).filter(id__in=get_accessible_shop_ids(request.user)).exists():
+            return Response({'error': 'You can only create orders for a shop assigned to you'}, status=403)
 
         serializer = OrderSerializer(data = request.data)
         if serializer.is_valid():
@@ -35,17 +42,17 @@ def order_list_create(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
     
 @api_view(['GET', 'PATCH', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def order_detail(request,id):
-    if request.user.role == 'owner':
-        order = Order.objects.filter(id=id, shop__user=request.user).first()
-    elif request.user.role == 'staff':
-        order = Order.objects.filter(id=id, shop__staff_members=request.user).first()
-    else:
+    if request.user.role not in ['owner', 'staff']:
         return Response({'error': 'Not allowed'}, status=403)
+    
+    order = Order.objects.filter(
+        id=id,
+        shop_id__in=get_accessible_shop_ids(request.user)
+    ).first()
 
     if not order:
         return Response({'error': 'Order not found!'}, status=404)

@@ -55,3 +55,9 @@ class Menu(models.Model):
     def __str__(self):
         return f"{self.name} - {self.price}"
     
+class Staff(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user} - {self.shop.name}"
