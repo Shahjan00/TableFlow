@@ -1,1 +1,1 @@
-web: gunicorn Order_Management.wsgi:application
+web: gunicorn Order_Management.wsgi:application --bind 0.0.0.0:$PORT
