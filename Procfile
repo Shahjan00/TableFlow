@@ -1,0 +1,1 @@
+web: gunicorn Order_Management.wsgi:application
