@@ -47,7 +47,7 @@ class TableSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # generate unique token
         qr_token = str(uuid.uuid4())
-        qr_url = f"http://127.0.0.1:8000/orders/menu/{qr_token}/"
+        qr_url = f"https://tableflow-production.up.railway.app/orders/menu/{qr_token}/"
 
         qr = qrcode.make(qr_url)
 

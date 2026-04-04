@@ -1,6 +1,6 @@
-# TableFlow
+# TableFlow QR Ordering System
 
-TableFlow is a Django REST API for QR-based restaurant ordering. It lets shop owners create shops, tables, and menus, generate QR codes for each table, assign staff to locations, and manage incoming orders in a simple role-based workflow.
+TableFlow is a Django REST API for QR-based restaurant ordering. It lets shop owners create shops, tables, and menus, generate QR codes for each table, assign staff to locations, and manage incoming orders in a simple role-based workflow. 🍽️
 
 This project is built for the common dine-in flow:
 
@@ -22,17 +22,17 @@ Restaurants often need a lightweight ordering backend before they need a full PO
 
 ## Features
 
-- Custom user model with role support for `owner`, `staff`, and `other`
-- JWT auth using SimpleJWT
-- Shop creation and management for owners
-- Table creation with generated QR code images
-- Menu management per shop
-- Staff assignment to specific shops
-- Role-aware order access for owners and staff
-- Public QR endpoints for customer menu viewing and order placement
-- PostgreSQL-ready database configuration via `DATABASE_URL`
+- Custom user model with role support for `owner`, `staff`, and `other` 👤
+- JWT auth using SimpleJWT 🔐
+- Shop creation and management for owners 🏪
+- Table creation with generated QR code images 📱
+- Menu management per shop 🍔
+- Staff assignment to specific shops 👨‍🍳
+- Role-aware order access for owners and staff 📋
+- Public QR endpoints for customer menu viewing and order placement 🧾
+- PostgreSQL-ready database configuration via `DATABASE_URL` 🐘
 - Static file serving with WhiteNoise
-- Railway-friendly deployment setup via `Procfile`
+- Railway-friendly deployment setup via `Procfile` 🚀
 
 ## Tech Stack
 
@@ -327,16 +327,6 @@ https://tableflow-production.up.railway.app
 
 That suggests Railway is the intended hosting target.
 
-## Current Limitations
-
-These are worth knowing if you plan to keep building on the project:
-
-- QR codes currently encode `http://127.0.0.1:8000/orders/menu/<qr_token>/`, which is great for local development but should be made environment-aware for production.
-- There is no browsable API documentation or OpenAPI schema yet.
-- Automated tests are currently placeholders.
-- `DEBUG` is hardcoded to `False`, which is not ideal for local development.
-- The root route only returns a simple `"Working Fine"` response.
-
 ## Roadmap Ideas
 
 - Add Swagger or DRF Spectacular documentation
@@ -357,10 +347,6 @@ If you want to improve TableFlow:
 4. Add or update tests
 5. Open a pull request
 
-## License
+## Author
 
-Add your preferred license here, for example `MIT`.
-
----
-
-If you want, I can also turn this into a more polished GitHub profile-style README with badges, a hero section, sample cURL snippets, and a stronger portfolio tone.
+Shahjan Ali
