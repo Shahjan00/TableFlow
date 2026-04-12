@@ -2,6 +2,9 @@
 
 TableFlow is a Django REST API for QR-based restaurant ordering. It lets shop owners create shops, tables, and menus, generate QR codes for each table, assign staff to locations, and manage incoming orders in a simple role-based workflow. 🍽️
 
+<img width="1200" height="1981" alt="tableflow-linkedin" src="https://github.com/user-attachments/assets/31b4703d-5169-4903-b869-721efd442934" />
+
+
 This project is built for the common dine-in flow:
 
 1. An owner creates a shop and its menu.
